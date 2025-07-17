@@ -1,1 +1,2 @@
 from gymnasium_environments.envs.grid_world import GridWorldEnv
+from gymnasium_environments.envs.create_red_ball import CreateRedBallEnv
