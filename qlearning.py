@@ -140,7 +140,7 @@ SET3 = {
 # Main function to run the training
 def main():
     try:
-        train_qlearning(ENV, **SET1, run_name="DEMO RUN")
+        train_qlearning(ENV, **SET1, run_name="Original Hyperparameters")
     except KeyboardInterrupt:
         print("\n[INFO] Training interrupted by user.")
         os._exit(0)
