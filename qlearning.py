@@ -48,7 +48,6 @@ def train_qlearning(env, episodes, gamma, epsilon, epsilon_min, decay, alpha, ru
         last_valid_state = 320 if state is None else state
 
         while not done:
-            os.system('clear')
             print(f"Episode {i+1} / {episodes}")
 
             steps += 1
@@ -108,7 +107,7 @@ def train_qlearning(env, episodes, gamma, epsilon, epsilon_min, decay, alpha, ru
 
     # Save plot
     os.makedirs("screenshots", exist_ok=True)
-    plot_file = f"screenshots/qlearning_redball_{run_name}.png"
+    plot_file = f"screenshots/{run_name}.png"
     fig.savefig(plot_file)
     print(f"Saved plot to {plot_file}")
     plt.close('all')
@@ -121,17 +120,16 @@ def train_qlearning(env, episodes, gamma, epsilon, epsilon_min, decay, alpha, ru
 ENV = gymnasium.make("gymnasium_environments/CreateRedBall-v0", render_mode="human")
 
 SET1 = {
-    "episodes": 200,
+    "episodes": 100,
     "gamma": 0.99,
-    "epsilon": 0.5,
+    "epsilon": 1.0,
     "epsilon_min": 0.01,
-    "decay": 0.5,
-    "alpha": 0.1
+    "decay": 0.005,
+    "alpha": 0.2
 }
-
 def main():
     try:
-        train_qlearning(ENV, **SET1, run_name="RedBall-Baseline")
+        train_qlearning(ENV, **SET1, run_name="Original Hyperparameters qlearning")
     except KeyboardInterrupt:
         print("\n[INFO] Training interrupted by user.")
         os._exit(0)

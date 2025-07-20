@@ -1,0 +1,25 @@
+Training Log
+Hyperparameters: Gamma: 0.99, Epsilon: 1.0, Decay: 0.005, Alpha: 0.2
+
+Episode 1: Steps 100, Total Reward -26.84
+Episode 2: Steps 100, Total Reward -33.67
+Episode 3: Steps 100, Total Reward -40.52
+Episode 4: Steps 100, Total Reward -28.14
+Episode 5: Steps 100, Total Reward -17.93
+Episode 6: Steps 100, Total Reward -35.63
+Episode 7: Steps 100, Total Reward -32.65
+Episode 8: Steps 100, Total Reward -30.00
+Episode 9: Steps 100, Total Reward -31.52
+Episode 10: Steps 100, Total Reward -34.05
+Episode 11: Steps 100, Total Reward -19.43
+Episode 12: Steps 100, Total Reward -28.96
+Episode 13: Steps 100, Total Reward -29.19
+Episode 14: Steps 100, Total Reward -34.71
+Episode 15: Steps 100, Total Reward -34.69
+Episode 16: Steps 100, Total Reward -36.95
+Episode 17: Steps 100, Total Reward -33.53
+Episode 18: Steps 100, Total Reward -36.51
+Episode 19: Steps 100, Total Reward -28.33
+Episode 20: Steps 100, Total Reward -36.97
+Episode 21: Steps 100, Total Reward -21.07
+Episode 22: Steps 100, Total Reward -35.78
