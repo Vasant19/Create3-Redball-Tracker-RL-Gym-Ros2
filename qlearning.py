@@ -1,5 +1,5 @@
 import gymnasium
-import blocksworld_env
+import gymnasium_environments
 import numpy as np
 import os
 import matplotlib
@@ -8,9 +8,14 @@ import matplotlib.pyplot as plt
 plt.ion()
 
 def train_qlearning(env, episodes, gamma, epsilon, epsilon_min, decay, alpha, run_name="default"):
+    # Validate discrete observation and action space
+    try:
+        numstates = env.observation_space.n
+        numactions = env.action_space.n
+    except AttributeError:
+        raise ValueError("Environment must use Discrete observation and action spaces.")
+
     # Initialize Q-table
-    numstates = env.observation_space.n
-    numactions = env.action_space.n
     qtable = np.random.rand(numstates, numactions).tolist()
 
     # Prepare plotting
@@ -24,11 +29,11 @@ def train_qlearning(env, episodes, gamma, epsilon, epsilon_min, decay, alpha, ru
     ax.set_ylabel('Steps / Cumulative Rewards')
 
     hyperparams_str = f"Gamma: {gamma}, Epsilon: {epsilon}, Decay: {decay}, Alpha: {alpha}"
-    ax.set_title(f'Q-Learning on Blocks World for {run_name} using {env.spec.id}', fontsize=12)
+    ax.set_title(f'Q-Learning on RedBall for {run_name}', fontsize=12)
     ax.grid(True)
     plt.legend()
 
-    # Prepare log file and clear previous content
+    # Prepare log file
     os.makedirs("./logs", exist_ok=True)
     log_filename = f"./logs/training_log_{run_name}.txt"
     with open(log_filename, "w") as f:
@@ -40,32 +45,46 @@ def train_qlearning(env, episodes, gamma, epsilon, epsilon_min, decay, alpha, ru
         steps = 0
         total_reward = 0
         done = False
+        last_valid_state = 320 if state is None else state
 
         while not done:
             os.system('clear')
             print(f"Episode {i+1} / {episodes}")
-            if env.render_mode == "human":
-                env.render()
 
             steps += 1
+
+            # Replace None state if needed
+            if state is None:
+                state = last_valid_state
+            else:
+                last_valid_state = state
 
             if np.random.uniform() < epsilon:
                 action = env.action_space.sample()
             else:
                 action = qtable[state].index(max(qtable[state]))
 
-            next_state, reward, done, truncated, info = env.step(action)
-            total_reward += reward
+            next_state, reward, terminated, truncated, info = env.step(action)
+            done = terminated or truncated
 
+            # Handle case where red ball is lost
+            if next_state is None:
+                reward = -1.0
+                next_state = state
+            else:
+                last_valid_state = next_state
+
+            # Q-learning update
             qtable[state][action] = (1 - alpha) * qtable[state][action] + alpha * (
                 reward + gamma * max(qtable[next_state])
             )
 
+            total_reward += reward
             state = next_state
 
         # Log episode result
         with open(log_filename, "a") as f:
-            f.write(f"Episode {i+1}: Steps {steps}, Total Reward {total_reward}\n")
+            f.write(f"Episode {i+1}: Steps {steps}, Total Reward {total_reward:.2f}\n")
 
         # Decay epsilon exponentially
         epsilon = max(epsilon_min, epsilon - decay * epsilon)
@@ -85,62 +104,34 @@ def train_qlearning(env, episodes, gamma, epsilon, epsilon_min, decay, alpha, ru
 
     plt.ioff()
     plt.show(block=False)
-
-    # Adjust plot layout
     plt.tight_layout()
 
-    # Save the plot
-    if not os.path.exists("screenshots"):
-        os.makedirs("screenshots")
-
-    filename = f"screenshots/blocksworld_qlearning_for_{run_name}.png"
-    fig.savefig(filename)
-    print(f"Saved plot to {filename}")
+    # Save plot
+    os.makedirs("screenshots", exist_ok=True)
+    plot_file = f"screenshots/qlearning_redball_{run_name}.png"
+    fig.savefig(plot_file)
+    print(f"Saved plot to {plot_file}")
     plt.close('all')
 
     print("Training complete ✅. Exiting now.")
-
-    # Finally close the environment
     env.close()
 
-# Constant Environments
-ENV_WITH_3_DIGIT_STATE = gymnasium.make("blocksworld_env/BlocksWorld-v0", render_mode="human")
-ENV_WITH_6_DIGIT_STATE = gymnasium.make("blocksworld_env/BlocksWorldEnvTarget-v0", render_mode="human")
+# -- Environment and Hyperparameters --
 
-ENV = ENV_WITH_3_DIGIT_STATE # To Switch between Environments
-# ENV = ENV_WITH_6_DIGIT_STATE # to use the 6-digit state environment
+ENV = gymnasium.make("gymnasium_environments/CreateRedBall-v0", render_mode="human")
 
-# Hyperparameter sets
 SET1 = {
-    "episodes": 30,  # Number of episodes the agent will train for
-    "gamma": 0.9, # Discount factor for balance between short-term and long-term rewards
-    "epsilon": 0.2, # Epsilon for exploration-exploitation trade-off
-    "epsilon_min": 0.01, # Minimum epsilon value to ensure some exploration
-    "decay": 0.01, # Decay rate for epsilon to reduce exploration over time
-    "alpha": 0.5 # Learning rate for updating Q-values
-}
-SET2 = {
-    "episodes": 30,
-    "gamma": 0.85,         # Lower discounting — more short-term focused
-    "epsilon": 0.3,        # Higher exploration initially
-    "epsilon_min": 0.05,   # Allow more exploration even at the end
-    "decay": 0.02,         # Faster epsilon decay
-    "alpha": 0.6           # More aggressive learning
+    "episodes": 200,
+    "gamma": 0.99,
+    "epsilon": 0.5,
+    "epsilon_min": 0.01,
+    "decay": 0.5,
+    "alpha": 0.1
 }
 
-SET3 = {
-    "episodes": 30,
-    "gamma": 0.99,         # Very long-term focused
-    "epsilon": 0.1,        # More exploitation from the start
-    "epsilon_min": 0.01,   # Still allow some exploration
-    "decay": 0.005,        # Very slow decay
-    "alpha": 0.3           # Conservative learning rate
-}
-
-# Main function to run the training
 def main():
     try:
-        train_qlearning(ENV, **SET1, run_name="Original Hyperparameters")
+        train_qlearning(ENV, **SET1, run_name="RedBall-Baseline")
     except KeyboardInterrupt:
         print("\n[INFO] Training interrupted by user.")
         os._exit(0)
@@ -150,7 +141,6 @@ def main():
         print("[INFO] Cleaning up...")
         try:
             ENV.close()
-            print("[INFO] Environment closed successfully.")
         except Exception as e:
             print(f"[WARN] Failed to close environment: {e}")
         os._exit(0)
