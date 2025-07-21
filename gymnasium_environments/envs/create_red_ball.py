@@ -150,7 +150,7 @@ class CreateRedBallEnv(gym.Env):
         if observation is None:
             self.missing_count += 1
             print(f"⚠️ Ball not detected. Missing count = {self.missing_count}")
-
+            reward = -1.0
             if self.missing_count >= self.recovery_threshold:
                 self.redball.search_for_ball()
                 if self.redball.redball_position is not None:
