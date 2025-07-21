@@ -120,12 +120,12 @@ def train_qlearning(env, episodes, gamma, epsilon, epsilon_min, decay, alpha, ru
 ENV = gymnasium.make("gymnasium_environments/CreateRedBall-v0", render_mode="human")
 
 SET1 = {
-    "episodes": 100,
-    "gamma": 0.99,
+    "episodes": 20,
+    "gamma": 0.95,
     "epsilon": 1.0,
-    "epsilon_min": 0.01,
-    "decay": 0.005,
-    "alpha": 0.2
+    "epsilon_min": 0.05,
+    "decay": 0.02,
+    "alpha": 0.3
 }
 def main():
     try:

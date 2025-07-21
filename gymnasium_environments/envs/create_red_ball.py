@@ -27,7 +27,7 @@ class RedBall(Node):
         self.create3_is_stopped = True
         self.redball_position = None
         self.last_seen_direction = 1  # default spin direction
-        self.turn_gain = 1.0
+        self.turn_gain = 0.5
 
         self.create_subscription(
             StopStatus,

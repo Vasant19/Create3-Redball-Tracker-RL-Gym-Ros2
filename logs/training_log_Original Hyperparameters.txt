@@ -23,3 +23,4 @@ Episode 19: Steps 100, Total Reward -28.33
 Episode 20: Steps 100, Total Reward -36.97
 Episode 21: Steps 100, Total Reward -21.07
 Episode 22: Steps 100, Total Reward -35.78
+Episode 23: Steps 100, Total Reward -23.08
