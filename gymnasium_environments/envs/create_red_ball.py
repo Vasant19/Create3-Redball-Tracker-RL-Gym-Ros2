@@ -159,8 +159,7 @@ class CreateRedBallEnv(gym.Env):
             observation = 320  # fallback to center
         else:
             self.missing_count = 0
-
-        reward = -abs(observation - 320) / 320
+            reward = -abs(observation - 320) / 320
 
         terminated = self.step_count >= 100
         truncated = False
