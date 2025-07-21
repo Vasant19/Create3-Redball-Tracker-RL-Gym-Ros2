@@ -1,0 +1,7 @@
+Rule-based agent run: Non RL Graph (Rule Based Agent)
+
+Episode 1: Reward=-55.82, Steps=100
+Episode 2: Reward=-93.47, Steps=100
+Episode 3: Reward=-93.14, Steps=100
+⚠️ Interrupted by user.
+✅ Saved plot to ./screenshots/Non RL Graph (Rule Based Agent).png
