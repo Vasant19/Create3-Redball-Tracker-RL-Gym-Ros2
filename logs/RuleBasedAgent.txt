@@ -1,0 +1,4 @@
+Rule-based agent run: RuleBasedAgent
+
+⚠️ Interrupted by user.
+✅ Saved plot to ./screenshots/RuleBasedAgent.png
