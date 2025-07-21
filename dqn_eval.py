@@ -1,9 +1,9 @@
 import gymnasium
-import blocksworld_env
+import gymnasium_environments
 from stable_baselines3 import DQN
-env = gymnasium.make("blocksworld_env/BlocksWorld-v0", render_mode="human")
+env = gymnasium.make("gymnasium_environments/CreateRedBall-v0", render_mode="human")
 
-model = DQN.load("./models/dqn_blocksworld", env=env)  # load saved model with environment
+model = DQN.load("./models/dqn_redball", env=env)  # load saved model with environment
 obs, info = env.reset()
 try:
     while True:

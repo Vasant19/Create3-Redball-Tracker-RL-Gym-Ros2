@@ -1,9 +1,9 @@
 import gymnasium
-import blocksworld_env
+import gymnasium_environments
 from stable_baselines3 import PPO
-env = gymnasium.make("blocksworld_env/BlocksWorld-v0", render_mode="human")
+env = gymnasium.make("gymnasium_environments/CreateRedBall-v0", render_mode="human")
 
-model = PPO.load("./models/ppo_blocksworld", env=env)  # load saved model with environment
+model = PPO.load("./models/ppo_redball", env=env)  # load saved model with environment
 obs, info = env.reset()
 try:
     while True:

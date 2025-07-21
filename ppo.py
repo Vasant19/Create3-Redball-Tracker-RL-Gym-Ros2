@@ -1,12 +1,12 @@
 import os
 import gymnasium
-import blocksworld_env
+import gymnasium_environments
 from stable_baselines3 import PPO
 from gymnasium.wrappers import RecordEpisodeStatistics
 from helper_callback import EpisodeLoggerCallback 
 
 # Prepare environment and wrap with episode statistics wrapper
-env = gymnasium.make("blocksworld_env/BlocksWorld-v0", render_mode=None)
+env = gymnasium.make("gymnasium_environments/CreateRedBall-v0", render_mode=None)
 env = RecordEpisodeStatistics(env) 
 
 # Instantiate the model
@@ -31,7 +31,7 @@ callback = EpisodeLoggerCallback(log_path, verbose=1)
 
 # Train the model 
 try:
-    model.learn(total_timesteps=30000, callback=callback, log_interval=4)
+    model.learn(total_timesteps=1000, callback=callback, log_interval=4)
     print("✅ PPO Model trained successfully!")
 
 # Handle exceptions
@@ -42,7 +42,7 @@ except Exception as e:
 
 # Save the model
 finally:
-    model.save("./models/ppo_blocksworld")
+    model.save("./models/ppo_redball")
     print("✅ PPO Model saved successfully!")
     env.close()
     os._exit(0)
