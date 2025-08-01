@@ -18,7 +18,7 @@ model = PPO(
     n_steps=2048,
     batch_size=64,
     n_epochs=10,
-    gamma=0.98,
+    gamma=0.9,
     gae_lambda=0.95,
     clip_range=0.2,
     ent_coef=0.01,
@@ -31,7 +31,7 @@ callback = EpisodeLoggerCallback(log_path, verbose=1)
 
 # Train the model 
 try:
-    model.learn(total_timesteps=1000, callback=callback, log_interval=4)
+    model.learn(total_timesteps=10000, callback=callback, log_interval=4)
     print("✅ PPO Model trained successfully!")
 
 # Handle exceptions
